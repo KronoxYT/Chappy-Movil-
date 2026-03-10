@@ -1,0 +1,158 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  apiKey       String?  @unique
+  role         String   @default("admin")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  conversations Conversation[]
+  chatMessages ChatMessage[]
+}
+
+model LinkingCode {
+  id           String   @id @default(cuid())
+  code         String   @unique
+  type         String   @default("manual") // manual, qr
+  status       String   @default("pending") // pending, used, expired
+  nodeId       String?
+  node         Node?    @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+  expiresAt    DateTime
+  usedAt       DateTime?
+  createdAt    DateTime @default(now())
+}
+
+model Node {
+  id             String   @id @default(cuid())
+  name           String
+  ipAddress      String   @unique
+  status         String   @default("offline") // online, offline, degraded
+  cpuUsage       Float    @default(0)
+  ramUsage       Float    @default(0)
+  gpuUsage       Float    @default(0)
+  totalRam       Float    @default(0) // GB
+  gpuModel       String?
+  processes      String?  // JSON array of processes
+  lastHeartbeat  DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  nodeLogs       NodeLog[]
+  linkingCodes   LinkingCode[]
+  token          String?  // Authentication token for the node
+  
+  // Hardware Profile
+  hardwareProfile String? // JSON with detailed hardware info
+  cpuModel        String?
+  cpuCores        Int?
+  cpuThreads      Int?
+  cpuMaxFreq      Int?
+  cpuCurrentFreq  Int?
+  gpuMemory       Int?    // MB
+  diskTotal       Float?  // GB
+  diskUsed        Float?  // GB
+  diskType        String? // SSD, HDD
+  osInfo          String?
+  hostname        String?
+  macAddress      String?
+  isLinked        Boolean @default(false)
+  linkedAt        DateTime?
+  linkedBy        String?
+}
+
+model NodeLog {
+  id        String   @id @default(cuid())
+  nodeId    String
+  node      Node     @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+  level     String   @default("info") // info, warning, error
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model Conversation {
+  id        String        @id @default(cuid())
+  title     String?
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  ConversationMessage[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model ConversationMessage {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String       // user, assistant
+  content        String
+  createdAt      DateTime     @default(now())
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String   // user, assistant
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model TrainingTask {
+  id           String   @id @default(cuid())
+  name         String
+  status       String   @default("idle") // idle, running, paused, completed, error
+  progress     Float    @default(0)
+  currentEpoch Int      @default(0)
+  totalEpochs  Int      @default(0)
+  loss         Float?
+  accuracy     Float?
+  learningRate Float    @default(0.001)
+  batchSize    Int      @default(32)
+  config       String?  // JSON config
+  startedAt    DateTime?
+  completedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SystemMetric {
+  id           String   @id @default(cuid())
+  timestamp    DateTime @default(now())
+  totalCpu     Float    @default(0)
+  totalRam     Float    @default(0)
+  avgGpu       Float    @default(0)
+  activeNodes  Int      @default(0)
+  totalNodes   Int      @default(0)
+  networkLoad  Float    @default(0)
+}
+
+model SystemSettings {
+  id                    String   @id @default(cuid())
+  websocketUrl          String   @default("ws://localhost:3003")
+  apiEndpoint           String   @default("/api")
+  refreshInterval       Int      @default(5000)
+  notificationsEnabled  Boolean  @default(true)
+  autoReconnect         Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model MemoryBackup {
+  id           String   @id @default(cuid())
+  type         String   @default("manual") // manual, auto
+  size         Float    @default(0) // MB
+  status       String   @default("pending") // pending, completed, error
+  cloudService String?
+  createdAt    DateTime @default(now())
+}

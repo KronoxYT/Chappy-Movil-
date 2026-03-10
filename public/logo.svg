@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0099cc;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="#0a0a0f"/>
+  <circle cx="256" cy="256" r="180" fill="none" stroke="url(#grad1)" stroke-width="12" opacity="0.3"/>
+  <circle cx="256" cy="256" r="140" fill="none" stroke="url(#grad1)" stroke-width="8" opacity="0.5"/>
+  <circle cx="256" cy="256" r="100" fill="none" stroke="url(#grad1)" stroke-width="4" opacity="0.7"/>
+  <!-- Central brain/AI icon -->
+  <path d="M256 140c-30 0-54 24-54 54v24c-12 6-20 18-20 32v40c0 20 16 36 36 36h76c20 0 36-16 36-36v-40c0-14-8-26-20-32v-24c0-30-24-54-54-54z" 
+        fill="none" stroke="url(#grad1)" stroke-width="6"/>
+  <circle cx="256" cy="230" r="20" fill="url(#grad1)"/>
+  <path d="M236 260v30M276 260v30M236 290h40" stroke="url(#grad1)" stroke-width="4" fill="none"/>
+  <!-- Connection nodes -->
+  <circle cx="160" cy="200" r="12" fill="url(#grad1)" opacity="0.8"/>
+  <circle cx="352" cy="200" r="12" fill="url(#grad1)" opacity="0.8"/>
+  <circle cx="160" cy="312" r="12" fill="url(#grad1)" opacity="0.8"/>
+  <circle cx="352" cy="312" r="12" fill="url(#grad1)" opacity="0.8"/>
+  <!-- Connection lines -->
+  <line x1="172" y1="200" x2="210" y2="220" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
+  <line x1="340" y1="200" x2="302" y2="220" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
+  <line x1="172" y1="312" x2="210" y2="292" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
+  <line x1="340" y1="312" x2="302" y2="292" stroke="url(#grad1)" stroke-width="2" opacity="0.6"/>
+</svg>
