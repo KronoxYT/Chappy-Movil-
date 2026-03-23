@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Chappi</string>
+    <string name="title_activity_main">Chappi</string>
+    <string name="package_name">com.chappi.app</string>
+    <string name="custom_url_scheme">com.chappi.app</string>
+</resources>
